@@ -1,0 +1,21 @@
+language: bash
+sudo: required
+
+services:
+  - docker
+
+env:
+  - CHROME_BRANCH=unstable
+  - CHROME_BRANCH=stable
+
+script:
+  - docker build  --build-arg CHROME_VERSION=google-chrome-$CHROME_BRANCH -t headless-chrome:latest
+  - export VERSION=`docker run --rm --entrypoint=/usr/bin/google-chrome headless-chrome:latest --version | grep -oP '[\.\d]+'`
+  - docker tag headless-chrome:latest headless-chrome:$CHROME_BRANCH-$VERSION
+
+after_success:
+  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+  - docker push headless-chrome:$CHROME_BRANCH-$VERSION
+  - if [ "$CHROME_BRANCH" == "stable" ]
+    docker push headless-chrome:latest
+    fi
