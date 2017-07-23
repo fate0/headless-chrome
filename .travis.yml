@@ -11,11 +11,12 @@ env:
 script:
   - docker build  --build-arg CHROME_BRANCH=$CHROME_BRANCH -t headless-chrome:latest .
   - export VERSION=`docker run --rm --entrypoint=/usr/bin/google-chrome headless-chrome:latest --version | grep -oP '[\.\d]+'`
-  - docker tag headless-chrome:latest headless-chrome:$CHROME_BRANCH-$VERSION
+  - docker tag headless-chrome:latest fate0/headless-chrome:$CHROME_BRANCH-$VERSION
+  - docker tag headless-chrome:latest fate0/headless-chrome:latest
 
 after_success:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-  - docker push headless-chrome:$CHROME_BRANCH-$VERSION
-  - if [ "$CHROME_BRANCH" == "stable" ]
-    docker push headless-chrome:latest
+  - docker push fate0/headless-chrome:$CHROME_BRANCH-$VERSION
+  - if [ "$CHROME_BRANCH" == "stable" ]; then
+    docker push fate0/headless-chrome:latest;
     fi

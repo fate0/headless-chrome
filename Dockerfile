@@ -6,15 +6,15 @@ ARG CHROME_BRANCH
 ENV CHROME_BRANCH $CHROME_BRANCH
 
 
-RUN apt-get update \
-    && apt-get install -y wget\
+RUN apt-get update -qqy\
+    && apt-get install -qqy wget\
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list \
-    && apt-get update \
-    && apt-get install -y google-chrome-$CHROME_BRANCH \
+    && apt-get update -qqy\
+    && apt-get install -qqy google-chrome-$CHROME_BRANCH \
     && rm /etc/apt/sources.list.d/google.list \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
