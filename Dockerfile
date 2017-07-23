@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM debian:stable-slim
 MAINTAINER fate0 <fate0@fatezero.org>
 
 
@@ -7,7 +7,7 @@ ENV CHROME_BRANCH $CHROME_BRANCH
 
 
 RUN apt-get update -qqy\
-    && apt-get install -qqy wget\
+    && apt-get install -qqy wget dumb-init gnupg ca-certificates apt-transport-https\
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 
@@ -21,7 +21,8 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add
 
 RUN mkdir /data
 
-ENTRYPOINT ["/usr/bin/google-chrome", \
+ENTRYPOINT ["/usr/bin/dumb-init", "--", \
+            "/usr/bin/google-chrome", \
             "--disable-gpu", \
             "--headless", \
             "--remote-debugging-address=0.0.0.0", \
