@@ -17,6 +17,6 @@ script:
 after_success:
   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
   - docker push fate0/headless-chrome:$CHROME_BRANCH-$VERSION
-  - if [ "$CHROME_BRANCH" == "stable" ]; then
+  - if [ "$CHROME_BRANCH" == "unstable" ]; then
     docker push fate0/headless-chrome:latest;
     fi
