@@ -9,7 +9,7 @@ env:
   - CHROME_BRANCH=stable
 
 script:
-  - docker build  --build-arg CHROME_VERSION=google-chrome-$CHROME_BRANCH -t headless-chrome:latest
+  - docker build  --build-arg CHROME_VERSION=google-chrome-$CHROME_BRANCH -t headless-chrome:latest .
   - export VERSION=`docker run --rm --entrypoint=/usr/bin/google-chrome headless-chrome:latest --version | grep -oP '[\.\d]+'`
   - docker tag headless-chrome:latest headless-chrome:$CHROME_BRANCH-$VERSION
 
